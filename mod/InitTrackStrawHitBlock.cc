@@ -48,8 +48,8 @@ Int_t StntupleInitMu2eTrackStrawHitBlock(TStnDataBlock* Block, AbsEvent* AnEvent
   data->GetModuleLabel("mu2e::PtrStepPointMCVectorCollection",stmc_module_label);
   data->GetDescription("mu2e::PtrStepPointMCVectorCollection",stmc_description );
 
-  art::Handle<mu2e::StrawHitCollection>       strh_handle;
-  const mu2e::StrawHitCollection*             list_of_hits(0);
+  art::Handle<mu2e::ComboHitCollection>       strh_handle;
+  const mu2e::ComboHitCollection*             list_of_hits(0);
 
   art::Handle<mu2e::PtrStepPointMCVectorCollection> mcptr_handle;
   const mu2e::PtrStepPointMCVectorCollection* list_of_steps(0);
@@ -94,7 +94,7 @@ Int_t StntupleInitMu2eTrackStrawHitBlock(TStnDataBlock* Block, AbsEvent* AnEvent
   data->fNTrackHits->Set(data->fNTracks);
   data->fFirst->Set(data->fNTracks);
 
-  const mu2e::StrawHit      *s_hit0(0), *sh(0); 
+  const mu2e::ComboHit      *s_hit0(0), *sh(0); 
 
   int nhtot = 0;
 
@@ -114,7 +114,7 @@ Int_t StntupleInitMu2eTrackStrawHitBlock(TStnDataBlock* Block, AbsEvent* AnEvent
 
       for (int ih=0; ih<nhits; ih++) {
 	const mu2e::TrkStrawHit* tsh = static_cast<const mu2e::TrkStrawHit*> (krep_hits->at(ih));
-	sh    = &tsh->strawHit();
+	sh    = &tsh->comboHit();
 	straw = &tsh->straw();
 	
 	int loc   = sh-s_hit0;
@@ -164,7 +164,7 @@ Int_t StntupleInitMu2eTrackStrawHitBlock(TStnDataBlock* Block, AbsEvent* AnEvent
 	  mcdoca        = 1.e6;
 	}
       
-	hit->Set(sh->strawId().asUint16(), sh->time(), sh->dt(), sh->energyDep(),
+	hit->Set(sh->strawId().asUint16(), sh->time(), 0./*sh->dt()*/, sh->energyDep(),//FIXME!
 		 tsh->isActive(),tsh->ambig(),tsh->driftRadius(),
 		 pdg_id, mother_pdg_id, gen_index, sim_id, 
 		 mcdoca, mc_mom);

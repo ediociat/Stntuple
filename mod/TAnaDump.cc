@@ -1451,7 +1451,7 @@ void TAnaDump::printKalRep(const KalRep* Krep, const char* Opt, const char* Pref
 	printTrkCaloHit(Krep,caloHit);
 	continue;
       }
-      const mu2e::StrawHit* sh = &hit->strawHit();
+      const mu2e::ComboHit* sh = &hit->comboHit();
       mu2e::Straw*   straw = (mu2e::Straw*) &hit->straw();
 
       hit->hitPosition(pos);
@@ -1504,7 +1504,7 @@ void TAnaDump::printKalRep(const KalRep* Krep, const char* Opt, const char* Pref
 	     len,
 	     //	     hit->hitRms(),
 	     plen.x(),plen.y(),plen.z(),
-	     sh->time(), sh->dt()
+	     sh->time(), 0.//sh->dt()
 	     );
 
       printf(" %2i %2i %2i %2i",
@@ -2184,15 +2184,15 @@ void TAnaDump::printComboHit(const mu2e::ComboHit* Hit, const mu2e::StepPointMC*
       if (IHit  >= 0) printf("%5i " ,IHit);
       else            printf("    ");
 
-      printf("%5u",Hit->sid().straw());
+      printf("%5u",Hit->strawId().straw());
 
       if (Flags >= 0) printf(" %08x",Flags);
       else            printf("        ");
       printf("  %5i  %5i   %5i   %5i   %8.3f   %8.3f   %9.6f   %10i   %10i  %10i  %10i %8.3f\n",
-	     Hit->sid().plane(), //straw->id().getPlane(),
-	     Hit->sid().panel(), //straw->id().getPanel(),
-	     Hit->sid().layer(), //straw->id().getLayer(),
-	     Hit->sid().straw(), //straw->id().getStraw(),
+	     Hit->strawId().plane(), //straw->id().getPlane(),
+	     Hit->strawId().panel(), //straw->id().getPanel(),
+	     Hit->strawId().layer(), //straw->id().getLayer(),
+	     Hit->strawId().straw(), //straw->id().getStraw(),
 	     Hit->time(),
 	     -1., //Hit->dt(),
 	     Hit->energyDep(),

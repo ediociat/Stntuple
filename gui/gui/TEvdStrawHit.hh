@@ -19,6 +19,7 @@
 #include "RecoDataProducts/inc/StrawHit.hh"
 #include "MCDataProducts/inc/StrawDigiMC.hh"
 #include "MCDataProducts/inc/PtrStepPointMCVectorCollection.hh"
+#include "DataProducts/inc/StrawEnd.hh"
 
 #else
 namespace mu2e {

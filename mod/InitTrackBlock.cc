@@ -199,7 +199,7 @@ Int_t StntupleInitMu2eTrackBlock  (TStnDataBlock* Block, AbsEvent* AnEvent, Int_
   const mu2e::KalRepPtrCollection*         list_of_kreps              (0);
   const mu2e::TrkQualCollection*           list_of_trkqual            (0);
   const mu2e::StrawDigiMCCollection*       list_of_mc_straw_hits      (0);
-  const mu2e::StrawHitCollection*          list_of_straw_hits         (0);
+  const mu2e::ComboHitCollection*          list_of_straw_hits         (0);
   const mu2e::TrkCaloIntersectCollection*  list_of_extrapolated_tracks(0);
   const mu2e::PIDProductCollection*        list_of_pidp               (0);
 
@@ -310,7 +310,7 @@ Int_t StntupleInitMu2eTrackBlock  (TStnDataBlock* Block, AbsEvent* AnEvent, Int_
     else                       AnEvent->getByLabel(stmc_module_label,stmc_description, mcptrHandle);
   }
 
-  art::Handle<mu2e::StrawHitCollection> shHandle;
+  art::Handle<mu2e::ComboHitCollection> shHandle;
   if (strh_module_label[0] != 0) {
     if (strh_description[0] == 0) AnEvent->getByLabel(strh_module_label,shHandle);
     else                          AnEvent->getByLabel(strh_module_label,strh_description,shHandle);
@@ -488,8 +488,8 @@ Int_t StntupleInitMu2eTrackBlock  (TStnDataBlock* Block, AbsEvent* AnEvent, Int_
     int     nwrong = 0;
     double  mcdoca;
 
-    const mu2e::StrawHit      *s_hit0;
-    const mu2e::StrawHit      *s_hit; 
+    const mu2e::ComboHit      *s_hit0;
+    const mu2e::ComboHit      *s_hit; 
     const mu2e::SimParticle   *sim(NULL); 
     const mu2e::StepPointMC   *stmc[2];
     const mu2e::Straw         *straw;
@@ -511,18 +511,18 @@ Int_t StntupleInitMu2eTrackBlock  (TStnDataBlock* Block, AbsEvent* AnEvent, Int_
 // the rest makes sense only for active hits
 //-----------------------------------------------------------------------------
 	if (hit->isActive()) {
-	  s_hit = &hit->strawHit();
+	  s_hit = &hit->comboHit();
 	  loc   = s_hit-s_hit0;
 	  if ((loc >= 0) && (loc < n_straw_hits)) {
 	    if ((list_of_mc_straw_hits != NULL) && (list_of_mc_straw_hits->size() > 0)) {
 
 	      const mu2e::StrawDigiMC* mcdigi = &list_of_mc_straw_hits->at(loc);
 
-	      if (mcdigi->wireEndTime(mu2e::TrkTypes::cal) < mcdigi->wireEndTime(mu2e::TrkTypes::hv)) {
-		stmc[0] = mcdigi->stepPointMC(mu2e::TrkTypes::cal).get();
+	      if (mcdigi->wireEndTime(mu2e::StrawEnd::cal) < mcdigi->wireEndTime(mu2e::StrawEnd::hv)) {
+		stmc[0] = mcdigi->stepPointMC(mu2e::StrawEnd::cal).get();
 	      }
 	      else {
-		stmc[0] = mcdigi->stepPointMC(mu2e::TrkTypes::hv ).get();
+		stmc[0] = mcdigi->stepPointMC(mu2e::StrawEnd::hv ).get();
 	      }
 
 	      //-----------------------------------------------------------------------------
@@ -661,7 +661,7 @@ Int_t StntupleInitMu2eTrackBlock  (TStnDataBlock* Block, AbsEvent* AnEvent, Int_
 
 	hit = (const mu2e::TrkStrawHit*) (*it);
 	
-	s_hit = &hit->strawHit();
+	s_hit = &hit->comboHit();
 	loc = s_hit-s_hit0;
 
 	zw = hit->straw().getMidPoint().z();

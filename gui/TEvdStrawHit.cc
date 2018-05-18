@@ -77,11 +77,11 @@ TEvdStrawHit::TEvdStrawHit(const mu2e::StrawHit*    Hit,
   
   double rdrift(0.);
   if (fStrawDigiMC) {
-    if (fStrawDigiMC->wireEndTime(mu2e::TrkTypes::cal) < fStrawDigiMC->wireEndTime(mu2e::TrkTypes::hv)) {
-      rdrift = fStrawDigiMC->driftDistance(mu2e::TrkTypes::cal);
+    if (fStrawDigiMC->wireEndTime(mu2e::StrawEnd::cal) < fStrawDigiMC->wireEndTime(mu2e::StrawEnd::hv)) {
+      rdrift = fStrawDigiMC->driftDistance(mu2e::StrawEnd::cal);
     }
     else {
-      rdrift = fStrawDigiMC->driftDistance(mu2e::TrkTypes::hv);
+      rdrift = fStrawDigiMC->driftDistance(mu2e::StrawEnd::hv);
     }
   }
       
