@@ -21,6 +21,8 @@
 #include "GeometryService/inc/GeometryService.hh"
 #include "GeometryService/inc/GeomHandle.hh"
 
+#include "TrackerGeom/inc/Tracker.hh"
+
 #include "Stntuple/gui/TEvdTrkStrawHit.hh"
 #include "Stntuple/gui/TStnVisManager.hh"
 
@@ -40,10 +42,19 @@ TEvdTrkStrawHit::TEvdTrkStrawHit(const mu2e::TrkStrawHit* Hit): TObject() {
   fLineR.SetX2(fPos.X()-fStrawDir.Y()*fSigR);
   fLineR.SetY2(fPos.Y()+fStrawDir.X()*fSigR);
 
-  const mu2e::Straw* straw = &Hit->straw();
+  // const mu2e::Straw* straw = &Hit->straw();
   
-  double zw     = straw->getMidPoint().z();
-  double rw     = straw->getMidPoint().perp();
+  // double zw     = straw->getMidPoint().z();
+  // double rw     = straw->getMidPoint().perp();
+  mu2e::GeomHandle<mu2e::Tracker> th;
+  const mu2e::Tracker*            tracker = th.get();
+  size_t     planeId = 0;//Hit->comboHit().strawId().plane();
+  const mu2e::Plane*  pln = &tracker->getPlane(planeId);
+  size_t     panelId = 0;//Hit->comboHit().strawId().panel();
+  const mu2e::Panel* panel = &pln->getPanel(panelId);
+
+  double zw     = panel->getStraw(0).getMidPoint().z();//Hit->comboHit().strawId().straw()).getMidPoint().z());
+  double rw     = panel->getStraw(0).getMidPoint().perp();
   double rdrift = fHit->driftRadius();
 
   fEllipse.SetX1(zw);

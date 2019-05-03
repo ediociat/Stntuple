@@ -100,7 +100,7 @@ int TTrkVisNode::InitEvent() {
   const mu2e::Tracker* tracker = ttHandle.get();
 
   // Tracker calibration object.
-  mu2e::ConditionsHandle<mu2e::StrawResponse> srep = mu2e::ConditionsHandle<mu2e::StrawResponse>("ignored");
+  //  mu2e::ConditionsHandle<mu2e::StrawResponse> srep = mu2e::ConditionsHandle<mu2e::StrawResponse>("ignored");
 
   fListOfStrawHits->Delete();
 

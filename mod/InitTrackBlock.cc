@@ -25,7 +25,7 @@
 #include "GeometryService/inc/VirtualDetector.hh"
 #include "GeometryService/inc/DetectorSystem.hh"
 
-#include "TrackerConditions/inc/Types.hh"
+//#include "TrackerConditions/inc/Types.hh"
 #include "TrackerGeom/inc/Tracker.hh"
 #include "CalorimeterGeom/inc/Calorimeter.hh"
 #include "CalorimeterGeom/inc/DiskCalorimeter.hh"

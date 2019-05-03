@@ -23,7 +23,7 @@
 #include "GeometryService/inc/GeomHandle.hh"
 
 #include "TrackerGeom/inc/Straw.hh"
-#include "TrackerConditions/inc/Types.hh"
+//#include "TrackerConditions/inc/Types.hh"
 
 #include "Stntuple/gui/TEvdStraw.hh"
 #include "Stntuple/gui/TEvdStrawHit.hh"
