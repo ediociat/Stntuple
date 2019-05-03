@@ -25,7 +25,7 @@
 // #include "TrkReco/inc/TrkStrawHit.hh"
 
 // #include "TrackCaloMatching/inc/TrkToCaloExtrapolCollection.hh"
-#include "TrackCaloMatching/inc/TrackClusterMatch.hh"
+#include "RecoDataProducts/inc/TrackClusterMatch.hh"
 // #include "TrackCaloMatching/inc/TrkToCaloExtrapol.hh"
 
 #include "MCDataProducts/inc/GenParticleCollection.hh"
