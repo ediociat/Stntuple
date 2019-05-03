@@ -53,9 +53,9 @@
 #include "BTrkData/inc/TrkStrawHit.hh"
 #include "RecoDataProducts/inc/KalRepPtrCollection.hh"
 
-#include "TrackCaloMatching/inc/TrkToCaloExtrapolCollection.hh"
+#include "RecoDataProducts/inc/TrkToCaloExtrapol.hh"
 #include "RecoDataProducts/inc/TrkCaloIntersectCollection.hh"
-#include "TrackCaloMatching/inc/TrackClusterMatch.hh"
+#include "RecoDataProducts/inc/TrackClusterMatch.hh"
 #include "TrkDiag/inc/TrkMCTools.hh"
 
 #include "Mu2eUtilities/inc/LsqSums4.hh"

@@ -41,7 +41,7 @@
 #include "TrkReco/inc/DoubletAmbigResolver.hh"
 
 #include "RecoDataProducts/inc/TrkCaloIntersectCollection.hh"
-#include "TrackCaloMatching/inc/TrackClusterMatch.hh"
+#include "RecoDataProducts/inc/TrackClusterMatch.hh"
 
 #include "MCDataProducts/inc/GenParticleCollection.hh"
 #include "MCDataProducts/inc/SimParticleCollection.hh"
