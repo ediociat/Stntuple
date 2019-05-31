@@ -882,7 +882,7 @@ namespace mu2e {
     TubsParams envelope(fTracker->getInnerTrackerEnvelopeParams());
 
     // Tracker calibration object.
-    mu2e::ConditionsHandle<mu2e::StrawResponse> srep("ignored");
+    //    mu2e::ConditionsHandle<mu2e::StrawResponse> srep("ignored");
 //-----------------------------------------------------------------------------
 // init VisManager - failed to do it in beginJob - what is the right place for doing it?
 //-----------------------------------------------------------------------------

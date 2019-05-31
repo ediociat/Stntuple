@@ -116,10 +116,6 @@ public:
 		    int                WeightMode,
 		    fhicl::ParameterSet const& Pset);
 
-  void evalHelixInfo(const mu2e::HelixSeed*         Helix,
-		     int   &NLoops,
-		     int   &NHitsLoopFailed);
-
   void printEventHeader();
 
   void printCaloCrystalHits (const char* ModuleLabel, 

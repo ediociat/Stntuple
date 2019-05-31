@@ -331,7 +331,7 @@ Stntuple : {
 	    timeClusterBlockName       : [ "TprTimeClusterBlock"     , "CprTimeClusterBlock"     ]
 	    timeClusterCollTag         : [ "TimeClusterFindere"      , "CalTimePeakFinder"       ]
 	    helixBlockName             : [ "TprHelixBlock"           , "CprHelixBlock"           ]
-	    helixCollTag               : [ "HelixFindere:Positive"   , "CalHelixFinder:Positive" ]
+	    helixCollTag               : [ "HelixFinderDe:Positive"  , "CalHelixFinder:Positive" ]
 	    trackSeedBlockName         : [ "TprTrackSeedBlock"       , "CprTrackSeedBlock"       ]
 	    trackSeedModuleLabel       : [ "KSFDeM"                  , "CalSeedFit"              ]
 	    trackBlockName             : [ "TprTrackBlock"           , "CprTrackBlock"           , "TrackBlock"             ]
@@ -414,7 +414,7 @@ Stntuple : {
 	    makeStepPointMC            : 1
 
 	    timeClusterBlockName       : [ "TimeClusterBlockTpr" , "TimeClusterBlockCpr"  ]
-	    timeClusterCollTag         : [ "TimeClusterFindere"  , "CalTimePeakFinder"    ]
+	    timeClusterCollTag         : [ "TimeClusterFinderDe"  , "CalTimePeakFinder"    ]
 	    helixBlockName             : [ "HelixBlock"          , "HelixBlockTpr"        , "HelixBlockCpr" ]
 	    helixCollTag               : [ "MHFinderDe"          , "MHFinderTprDe"        , "MHFinderCprDe" ]
 
@@ -472,9 +472,9 @@ Stntuple : {
 	    makeTimeClusters           : 1
 	    makeHelices                : 1
 	    timeClusterBlockName       : [ "TimeClusterBlockDepTpr"     , "TimeClusterBlockDepCpr"     , "TimeClusterBlockDemTpr"     , "TimeClusterBlockDemCpr"     ]
-	    timeClusterCollTag         : [ "TimeClusterFindere"         , "CalTimePeakFinder"          , "TimeClusterFindere"         , "CalTimePeakFinder"          ]
+	    timeClusterCollTag         : [ "TimeClusterFinderDe"        , "CalTimePeakFinder"          , "TimeClusterFinderDe"        , "CalTimePeakFinder"          ]
 	    helixBlockName             : [ "HelixBlockDepTpr"           , "HelixBlockDepCpr"           , "HelixBlockDemTpr"           , "HelixBlockDemCpr"           ]
-	    helixCollTag               : [ "HelixFindere:Negative"      , "CalHelixFinderDe:Negative"  , "HelixFindere:Positive"      , "CalHelixFinderDe:Positive"  ]
+	    helixCollTag               : [ "HelixFinderDe:Negative"     , "CalHelixFinderDe:Negative"  , "HelixFinderDe:Positive"     , "CalHelixFinderDe:Positive"  ]
 	    trackSeedBlockName         : [ "TrackSeedBlockDepTpr"       , "TrackSeedBlockDepCpr"       , "TrackSeedBlockDemTpr"       , "TrackSeedBlockDemCpr"       ]
 	    trackSeedCollTag           : [ "KSFDeP"                     , "CalSeedFitDep"              , "KSFDeM"                     , "CalSeedFitDem"              ]
 	    trackBlockName             : [ "TrackBlockDepTpr"           , "TrackBlockDepCpr"           , "TrackBlockDemTpr"           , "TrackBlockDemCpr"           ]

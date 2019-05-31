@@ -65,6 +65,7 @@
 #include "Mu2eUtilities/inc/SimParticleTimeOffset.hh"
 #include "TrkDiag/inc/TrkMCTools.hh"
 
+#include "Mu2eUtilities/inc/HelixTool.hh"
 
 //BaBar includes
 #include "BTrk/BbrGeom/TrkLineTraj.hh"
@@ -79,72 +80,6 @@ using namespace std;
 ClassImp(TAnaDump)
 
 TAnaDump* TAnaDump::fgInstance = 0;
-
-void TAnaDump::evalHelixInfo(const mu2e::HelixSeed*         Helix,
-			     int   &NLoops,
-			     int   &NHitsLoopFailed){
-  const mu2e::ComboHit*     hit(0);
-
-  //init
-  NLoops          = 0;
-  NHitsLoopFailed = 0;
-  
-  int           nMinHitsLoop(3), nHitsLoop(0), nHitsLoopChecked(0);
-  float         meanHitRadialDist(0), z_first_hit(0), z_last_hit(0), counter(0); 
-  bool          isFirst(true);
-  float         half_pitch  =  M_PI*fabs(Helix->_helix._lambda);
-  float         dz_min_toll = 600.;
-  unsigned      nhits = Helix->_hhits.size();
-
-  for (unsigned f=0; f<nhits; ++f){
-    hit = &Helix->_hhits[f];
-    if (hit->_flag.hasAnyProperty(mu2e::StrawHitFlag::outlier))     continue;
-      
-    meanHitRadialDist += sqrtf(hit->pos().x()*hit->pos().x() + hit->pos().y()*hit->pos().y());
-    ++counter;
-    float z = hit->pos().z();
-    if (isFirst){
-      z_first_hit = z;
-      z_last_hit  = z;
-      nHitsLoop   = 1;
-      isFirst     = false;
-    }else {
-      float    dz_last_hit  = z - z_last_hit;
-      float    dz_first_hit = z - z_first_hit;
-
-      if ( ( dz_first_hit < half_pitch) && ( dz_last_hit < dz_min_toll)){
-	++nHitsLoop;
-	z_last_hit        = z;
-      } else {
-	if (nHitsLoop >= nMinHitsLoop) {
-	  ++NLoops;
-	  nHitsLoopChecked +=  nHitsLoop;
-	}
-	nHitsLoop = 0;
-
-	if ( (z - z_last_hit) >= half_pitch){
-	  //reset the hits-per-loop counter
-	  nHitsLoop = 1;
-	      
-	  //re-set the values of the first and last z of the hits within the loop
-	  z_first_hit = z;
-	  z_last_hit  = z;
-	}
-      }
-    }
-	
-  }//end loop over the hits
-
-  if (counter > 0) meanHitRadialDist /= counter;
-  if (nHitsLoop >= nMinHitsLoop) {
-    ++NLoops;
-    nHitsLoopChecked +=  nHitsLoop;
-  }
-      
-  NHitsLoopFailed   =  nHitsLoopChecked;
-}
-
-  
 
 double TAnaDump::evalWeight(const mu2e::ComboHit* Hit   ,
 			    XYZVec&   StrawDir ,
@@ -748,7 +683,7 @@ void TAnaDump::printHelixSeed(const mu2e::HelixSeed* Helix          ,
   if ((opt == "") || (opt == "banner")) {
     printf("------------------------------------------------------------------");
     printf("--------------------------------------------------------------------------------------\n");
-    printf("  HelID   Address    N nL nCln     P        pT      T0     T0err  ");
+    printf("  HelID   Address    N    nL   P        pT      T0     T0err  ");
     printf("    D0      FZ0      X0       Y0    Lambda    radius   ECal   chi2XY  chi2ZPhi    flag\n");
     printf("------------------------------------------------------------------");
     printf("--------------------------------------------------------------------------------------\n");
@@ -788,18 +723,20 @@ void TAnaDump::printHelixSeed(const mu2e::HelixSeed* Helix          ,
       double x0     = robustHel->centerx();
       double y0     = robustHel->centery();
     
-      int    nLoops(0), nhitsLoopChecked(0);
-      evalHelixInfo(Helix, nLoops, nhitsLoopChecked);
+      double  nLoops(0);
+
+      mu2e::HelixTool helTool(Helix, 3);
+      //      evalHelixInfo(Helix, nLoops, nhitsLoopChecked);
+      nLoops   = helTool.nLoops();
 
       const mu2e::CaloCluster*cluster = Helix->caloCluster().get();
       double clusterEnergy(-1);
       if (cluster != 0) clusterEnergy = cluster->energyDep();
-      printf("%5i %12p %3i %2i %4i %8.3f %8.3f %7.3f %7.3f",
+      printf("%5i %12p %3i %6.2f %10.3f %8.3f %7.3f %7.3f",
 	     -1,
 	     Helix,
 	     nhits,
 	     nLoops, 
-	     nhitsLoopChecked,
 	     mom, pt, t0, t0err );
 
       float chi2xy   = robustHel->chi2dXY();

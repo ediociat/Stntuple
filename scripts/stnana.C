@@ -43,7 +43,7 @@ void stnana (TString     Book   ,
 //-----------------------------------------------------------------------------
   char        macro[200], load_script[200], line[200], cmd[200];
   const char* pkg;
-  const char* test_release_dir = gSystem->Getenv("MU2E_SATELLITE_RELEASE");
+  const char* test_release_dir = gSystem->Getenv("MU2E_BASE_RELEASE");
 
   const char* script[] = { // loaded explicitly
     "init_geometry.C"       , "PWD",
