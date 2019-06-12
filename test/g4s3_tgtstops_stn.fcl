@@ -46,7 +46,6 @@ physics : {
 	    makePid             : 0
 	    makeSimp            : 1
 	    makeTracks          : 0
-	    makeVDHits          : 0
 	    makeStepPointMC     : 1
 
 	    simpCollTag         : "tgtStopFilter"

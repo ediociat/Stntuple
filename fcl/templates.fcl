@@ -141,17 +141,6 @@ BEGIN_PROLOG
 					@sequence::TrackCaloMatching.matching_cpr,
 					ParticleID, 
 					@sequence::stnmaker3_seq ]
-
-
-# path_mix_hits_calo_apr_vpid_stnm3 : [ @sequence::gen_mix_seq     , @sequence::hitMakerSeq ,  # FIXME
-# 					@sequence::CaloCluster.Reco  , @sequence::allPatRecSeq,
-# 					MergePatRecTpr,
-# 					MergePatRecCpr,
-# 					@sequence::TrackCaloMatching.matching,
-# 					@sequence::TrackCaloMatching.matching_tpr,
-# 					@sequence::TrackCaloMatching.matching_cpr,
-# 					ParticleID, 
-# 					@sequence::stnmaker3_seq ]
 #------------------------------------------------------------------------------
 # read signal files and run full reconstruction
 #------------------------------------------------------------------------------
@@ -281,20 +270,23 @@ Stntuple : { @table::Stntuple             # defined in Stntuple/fcl/prolog.fcl
 #------------------------------------------------------------------------------
 # TrkPatRec and CalPatRec modules
 #------------------------------------------------------------------------------
-	@table::CaloReco.producers        # defined in CaloReco
-	@table::CaloCluster.producers     # defined in CaloCluster
+	@table::CaloReco.producers         # defined in CaloReco
+	@table::CaloCluster.producers      # defined in CaloCluster
 #	@table::CaloClusterTrigger.producers # defined in CaloCluster
 	@table::CalPatRec.producers
 	@table::ParticleID.producers
 	@table::TrackCaloMatching.producers
-	@table::Tracking.producers        # defined in TrkPatRec
-	@table::TrkHitReco.producers      # defined in TrkHitReco
-	@table::CommonTrk.producers
+	@table::Tracking.producers         # defined in TrkPatRec
+	@table::TrkHitReco.producers       # defined in TrkHitReco
 
+	@table::CommonTrk.producers
 	TrkQualDeMHPar  : { @table::TrkQual KalSeedCollection: "KFFDeMHPar"  }
 	TrkQualDeMHDar  : { @table::TrkQual KalSeedCollection: "KFFDeMHDar"  }
 	TrkQualDmuMHPar : { @table::TrkQual KalSeedCollection: "KFFDmuMHPar" }
 	TrkQualDmuMHDar : { @table::TrkQual KalSeedCollection: "KFFDmuMHDar" }
+
+	@table::CrvRecoMCPackage.producers # define in CRVResponse
+	CrvCoincidenceClusterMatchMC: { @table::CrvCoincidenceClusterMatchMC timeOffsets: @local::TIME_OFFSET_MAPS } 
     }
 
     filters : { @table::Stntuple.filters
@@ -377,16 +369,18 @@ kludge_Tracking_TPRDpP       : [ TimeClusterFinder, HelixFinder, KSFDpP, KFFDpP 
 
 Stntuple.trk_hit_reco        : [ makeSH, makePH, FlagBkgHits]
 
-Stntuple.cal_reco        : [ CaloRecoDigiFromDigi ,CaloCrystalHitFromHit, 
-			     CaloProtoClusterFromCrystalHit, CaloClusterFromProtoCluster ]
+Stntuple.cal_reco            : [ CaloRecoDigiFromDigi ,CaloCrystalHitFromHit, 
+				 CaloProtoClusterFromCrystalHit, CaloClusterFromProtoCluster ]
 
-Stntuple.cpr_reco        : [ @sequence::CalPatRec.reco, 
-			     MergePatRecCpr,
-			     @sequence::TrackCaloMatching.matching_cpr ]
+Stntuple.cpr_reco            : [ @sequence::CalPatRec.reco, 
+				 MergePatRecCpr,
+				 @sequence::TrackCaloMatching.matching_cpr ]
 
-Stntuple.tpr_reco        : [ @sequence::Tracking.TPRDeM , 
-			     MergePatRecTpr, 
-			     @sequence::TrackCaloMatching.matching_tpr ]
+Stntuple.crv_reco            : [ @sequence::CrvRecoMCPackage.CrvRecoMCSequence ]
+
+Stntuple.tpr_reco            : [ @sequence::Tracking.TPRDeM , 
+				 MergePatRecTpr, 
+				 @sequence::TrackCaloMatching.matching_tpr ]
 
 Stntuple.mpr_reco        : [ @sequence::Tracking.TPRDeM , 
 			     @sequence::CalPatRec.reco, 

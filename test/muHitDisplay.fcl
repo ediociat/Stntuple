@@ -36,6 +36,7 @@ physics : { @table::physics
 	   @sequence::CaloCluster.Reco, 
 	   @sequence::allPatRecSeq,
 	   @sequence::vadimPidSeq, 
+	   @sequence::Stntuple.crv_reco,
 	   MuHitDisplay 
 	  ]
 

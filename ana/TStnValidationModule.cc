@@ -279,7 +279,7 @@ void TStnValidationModule::BookTrackHistograms(TrackHist_t* Hist, const char* Fo
 
 //-----------------------------------------------------------------------------
 void TStnValidationModule::BookEventHistograms(EventHist_t* Hist, const char* Folder) {
-  char name [200];
+  //  char name [200];
   //  char title[200];
 
   HBook1F(Hist->fEleCosTh  ,"ce_costh" ,Form("%s: Conversion Electron Cos(Theta)"  ,Folder),100,-1,1,Folder);
@@ -300,27 +300,6 @@ void TStnValidationModule::BookEventHistograms(EventHist_t* Hist, const char* Fo
   HBook1F(Hist->fBestHyp[0],"bfh0"     ,Form("%s: Best Fit Hyp[0](e-,e+,mu-,mu+)"  ,Folder),5,0,5,Folder);
   HBook1F(Hist->fBestHyp[1],"bfh1"     ,Form("%s: Best Fit Hyp[1](e-,e+,mu-,mu+)"  ,Folder),5,0,5,Folder);
   HBook1F(Hist->fNGenp     ,"ngenp"    ,Form("%s: N(Gen Particles)"                ,Folder),500,0,500,Folder);
-
-  //  char  name[200];
-  for (int i=0; i<2; i++) {
-    sprintf(name,"ncch_%i",i);
-    HBook1F(Hist->fNCaloCrystalHits[i],name,Form("%s: N(calo crystal hits) [%i]",Folder,i),500,0,1000,Folder);
-    sprintf(name,"ncch_vs_vane_%i",i);
-    HBook2F(Hist->fNCaloHitsVsVane[i],name,Form("%s: N(calo crystal hits) vs vane[%i]",Folder,i),4,0,4,200,0,200,Folder);
-    sprintf(name,"ncch_vs_row_%i",i);
-    HBook2F(Hist->fNCaloHitsVsRow[i],name,Form("%s: N(calo crystal hits) vs row [%i]",Folder,i),20,0,20,200,0,200,Folder);
-    sprintf(name,"ncch_vs_col_%i",i);
-    HBook2F(Hist->fNCaloHitsVsCol[i],name,Form("%s: N(calo crystal hits) vs col [%i]",Folder,i),50,0,50,200,0,200,Folder);
-  }
-
-  for (int i=0; i<4; i++) {
-    HBook1F(Hist->fETot        [i],Form("etot_%i"    ,i),Form("%s: Etot[%i]",Folder,i), 300, 0,150,Folder);
-    HBook2F(Hist->fECrVsR      [i],Form("ecr_vs_r_%i",i),Form("%s: E Cr Vs R [%i]"    ,Folder,i), 100, 0,1000,500,0,100,Folder);
-    HBook2F(Hist->fNCrVsR      [i],Form("ncr_vs_r_%i",i),Form("%s: N Cr Vs R [%i]"    ,Folder,i), 100, 0,1000,100,0,100,Folder);
-
-    HBook2F(Hist->fNCrystalHitsVsR[i],Form("ncrh_vs_r_%i",i),Form("%s: N Crystal Hits[%i] vs R",Folder,i), 100, 0, 1000,100,0,100,Folder);
-    HBook2F(Hist->fNHitCrystalsVsR[i],Form("nhcr_vs_r_%i",i),Form("%s: N Hit Crystals[%i] vs R",Folder,i), 100, 0, 1000,100,0,100,Folder);
-  }
 
   HBook1F(Hist->fNHitCrystalsTot,"nhcr_tot",Form("%s: NHit Crystals Tot",Folder), 100, 0,100,Folder);
   HBook1F(Hist->fECal,"ecal",Form("%s: E(cal), sum over both disks",Folder), 500, 0,250,Folder);
@@ -744,24 +723,6 @@ void TStnValidationModule::FillEventHistograms(EventHist_t* Hist) {
 	nhits_vane[1][vane_id ] += 1;
       }
     }
-
-    Hist->fNCaloCrystalHits[0]->Fill(fNCalHits);
-    Hist->fNCaloCrystalHits[1]->Fill(n_cch_1mev);
-
-    for (int iv=0; iv<4; iv++) {
-      Hist->fNCaloHitsVsVane[0]->Fill(iv,nhits_vane[0][iv]);
-      Hist->fNCaloHitsVsVane[1]->Fill(iv,nhits_vane[1][iv]);
-    }
-
-    for (int ir=0; ir<20; ir++) {
-      Hist->fNCaloHitsVsRow[0]->Fill(ir,nhits_row[0][ir]);
-      Hist->fNCaloHitsVsRow[1]->Fill(ir,nhits_row[1][ir]);
-    }
-
-    for (int ic=0; ic<50; ic++) {
-      Hist->fNCaloHitsVsCol[0]->Fill(ic,nhits_col[0][ic]);
-      Hist->fNCaloHitsVsCol[1]->Fill(ic,nhits_col[1][ic]);
-    }
   }
   else if (fCalorimeterType == 2) {
 //-----------------------------------------------------------------------------
@@ -802,9 +763,6 @@ void TStnValidationModule::FillEventHistograms(EventHist_t* Hist) {
       etot          [idisk] += e;
       n_hit_crystals[idisk] += 1;
 
-      Hist->fECrVsR[idisk]->Fill(r,e);
-      Hist->fNCrVsR[idisk]->Fill(r,1);
-
       bin  = (int) (r/10.);
 
       nhits_r         [idisk][bin] += 1;
@@ -821,19 +779,6 @@ void TStnValidationModule::FillEventHistograms(EventHist_t* Hist) {
     for (int id=0; id<ndisks; id++) {
       n_hit_crystals_tot += n_hit_crystals[id];
       ecal += etot[id];
-//-----------------------------------------------------------------------------
-// fill 'per-disk' histograms
-//-----------------------------------------------------------------------------
-      Hist->fETot[id]->Fill(etot[id]);
-
-//-----------------------------------------------------------------------------
-// 100 is fixed by the number of bins in the radial distributions
-//-----------------------------------------------------------------------------
-      for (int ib=0; ib<100; ib++) {
-	r = (ib+0.5)*10.;
-	Hist->fNCrystalHitsVsR[id]->Fill(r,nhits_r         [id][ib]);
-	Hist->fNHitCrystalsVsR[id]->Fill(r,n_hit_crystals_r[id][ib]);
-      }
     }
 
     Hist->fNHitCrystalsTot->Fill(n_hit_crystals_tot);
@@ -1451,9 +1396,6 @@ void TStnValidationModule::FillHistograms() {
       }
     }
   }
-//-----------------------------------------------------------------------------
-// the same ladder for TrkPatRec tracks 
-//-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 // Simp histograms
 //-----------------------------------------------------------------------------

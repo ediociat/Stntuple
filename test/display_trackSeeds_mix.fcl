@@ -68,7 +68,6 @@ physics : { @table::physics
 	StntupleMaker : { @table::StntupleMaker	
 	    makeTracks     : 0
 	    makeTrackSeeds : 1
-	    makeVDHits     : 0
 	}
 	InitStntuple  : { @table::InitStntuple  histFileName  : "dispaly-test.stn" }
 #	InitStntuple  : { @table::InitStntuple  histFileName  : "ce-test.stn" }

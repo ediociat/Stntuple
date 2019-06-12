@@ -26,6 +26,7 @@ physics : {
 	      @sequence::Stntuple.digis          ,  # this includes compressDigiMCs
 	      @sequence::Stntuple.trk_hit_reco   ,
 	      @sequence::Stntuple.cal_reco       ,
+	      @sequence::Stntuple.crv_reco       ,
 	      @sequence::Stntuple.reco_De        ,
 # 	      @sequence::Stntuple.stnmaker_De
 	      MuHitDisplayDeMHPar

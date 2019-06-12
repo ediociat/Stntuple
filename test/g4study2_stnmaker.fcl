@@ -44,11 +44,9 @@ physics : {
 	    makePid         : 0
 	    makeSimp        : 1
 	    makeTracks      : 0
-	    makeVDHits      : 0
 	    makeStepPointMC : 0
 
 	    simpCollTag     : "g4run"
-	    vdHitsCollTag   : "stepper"
 
 	    spmcBlockName   : ["SpmcBlock"     , "VDetBlock"    ]
 	    spmcCollTag     : ["g4run:stepper" , "g4run:timeVD" ]

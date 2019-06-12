@@ -45,7 +45,6 @@ physics : {
 	    makeClusters        : 0
 	    makePid             : 0
 	    makeTracks          : 0
-	    makeVDHits          : 0
 	    makeStepPointMC     : 1
 
 	    simpCollTag         : "mothersFilter"

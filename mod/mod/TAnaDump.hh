@@ -45,6 +45,9 @@ namespace mu2e {
   class StrawHitMCTruth;
   class CaloCluster;
   class CaloProtoCluster;
+  class CrvRecoPulse;
+  class CrvCoincidence;
+  class CrvCoincidenceCluster;
   class TrkToCaloExtrapol;
   class StepPointMC;
   class GenParticle;
@@ -104,10 +107,10 @@ public:
   void   AddObject      (const char* Name, void* Object);
   void*  FindNamedObject(const char* Name);
 
-  void SetEvent(art::Event& Evt) { fEvent = &Evt; }
+  void   SetEvent(art::Event& Evt) { fEvent = &Evt; }
 
-  void SetFlagBgrHitsModuleLabel(const char* Tag) { fFlagBgrHitsModuleLabel = Tag; }
-  void SetStrawDigiMCCollTag    (const char* Tag) { fStrawDigiMCCollTag     = Tag; }
+  void   SetFlagBgrHitsModuleLabel(const char* Tag) { fFlagBgrHitsModuleLabel = Tag; }
+  void   SetStrawDigiMCCollTag    (const char* Tag) { fStrawDigiMCCollTag     = Tag; }
 
   double evalWeight(const mu2e::ComboHit* Hit   ,
 		    XYZVec& StrawDir ,
@@ -116,7 +119,11 @@ public:
 		    int                WeightMode,
 		    fhicl::ParameterSet const& Pset);
 
-  void printEventHeader();
+  void   printEventHeader();
+//-----------------------------------------------------------------------------
+// calorimeter
+//-----------------------------------------------------------------------------
+  void printCalorimeter();
 
   void printCaloCrystalHits (const char* ModuleLabel, 
 			     const char* ProductName = "", 
@@ -133,8 +140,6 @@ public:
   void printCaloHits        (const char* ModuleLabel, 
 			     const char* ProductName = "", 
 			     const char* ProcessName = ""); 
-
-  void printDiskCalorimeter();
 
   void printCaloCluster          (const mu2e::CaloCluster* Cluster ,
 				  const char*              Opt = "",
@@ -153,73 +158,32 @@ public:
   void printCaloProtoClusterCollection (const char* ModuleLabel, 
 					const char* ProductName,
 					const char* ProcessName);
+//-----------------------------------------------------------------------------
+// CRV
+//-----------------------------------------------------------------------------
+  void printCrvCoincidence        (const mu2e::CrvCoincidence* CrvC  ,
+				   const char*                 Opt = "");
   
-  void printTrackSeed          (const mu2e::KalSeed* TrkSeed, 
-				const char* Opt = ""    ,
-				const char* ModuleLabelStrawHit="makeSH");
+  void printCrvCoincidenceCollection (const char* ModuleLabel, 
+				      const char* ProductName= "",
+				      const char* ProcessName= "");
 
-  void printTrackSeedCollection(const char* ModuleLabel             , 
-				const char* ProductName         = "", 
-				const char* ProcessName         = "",
-				int         hitOpt              = 0,
-				const char* ModuleLabelStrawHit ="makeSH"); 
-
-  void printHelixSeed          (const mu2e::HelixSeed*         Helix   , 
-				//				const char* HelixSeedCollTag           ,
-				const char* StrawHitCollTag            ,  // usually - "makeSH"
-				const char* StrawDigiCollTag = "makeSD",
-				const char* Opt              = ""      );
-
-  void printHelixSeedCollection(const char* HelixSeedCollTag           ,  // always needed
-				int         PrintHits        = 0       ,
-				const char* StrawHitCollTag  = "makeSH",  // usually, "makeSH"
-				const char* StrawDigiCollTag = "makeSD");
-
-  void printTrkCaloHit(const KalRep* Krep, mu2e::TrkCaloHit* CaloHit);
-
-  void printKalRep(const KalRep* Krep, const char* Opt = "", const char* Prefix = "");
-
-  void printKalRepCollection(const char* ModuleLabel     , 
-			     const char* ProductName = "", 
-			     const char* ProcessName = "",
-			     int         hitOpt      = 0); 
+  void printCrvCoincidenceCluster (const mu2e::CrvCoincidenceCluster* CrvC  ,
+				   const char*                        Opt = "");
   
-  void printTrkToCaloExtrapol           (const mu2e::TrkToCaloExtrapol*extrk,
-					 const char* Opt = "");
+  void printCrvCoincidenceClusterCollection (const char* ModuleLabel, 
+					     const char* ProductName= "",
+					     const char* ProcessName= "");
 
-  void printTrkToCaloExtrapolCollection (const char* ModuleLabel, 
-					 const char* ProductName = "", 
-					 const char* ProcessName = "");
-
-  void printTimeCluster   (const mu2e::TimeCluster* TimePeak, const char* Opt = "", 
-			   const mu2e::ComboHitCollection* ChColl=0,
-			   const char*StrawDigiMCModuleLabel = "makeSD");
-
-  void printTimeClusterCollection(const char* ModuleLabel        , 
-				  const char* ComboHitModuleLabel,
-				  const char* ProductName = ""   , 
-				  const char* ProcessName = ""   ,
-				  int         PrintHits   = 0    ,
-				  const char* StrawDigiMCModuleLabel = "makeSD");
-
-//   void printCaloCrystalHit(const CaloCrystalHit* Hit, const char* Opt = "");
-//   void printCaloHit       (const CaloHit*        Hit, const char* Opt = "");
-  void printGenParticle   (const mu2e::GenParticle*    P  , const char* Opt = "");
-
-  void printGenParticleCollections();
-
-  void printSimParticle   (const mu2e::SimParticle*    P  , const char* Opt = "", const void* PrintData = nullptr);
-
-  void printSimParticleCollection(const char* ModuleLabel     , 
-				  const char* ProductName = "", 
-				  const char* ProcessName = "");
-
-  void printStrawHit      (const mu2e::StrawHit*    Hit, 
-			   const mu2e::StepPointMC* Step,
-			   const char*              Opt   = "", 
-			   int                      INit  = -1,
-			   int                      Flags = -1);
+  void printCrvRecoPulse          (const mu2e::CrvRecoPulse* Pulse  ,
+				   const char*              Opt = "");
   
+  void printCrvRecoPulseCollection (const char* ModuleLabel, 
+				    const char* ProductName= "",
+				    const char* ProcessName= "");
+//-----------------------------------------------------------------------------
+// tracking
+//-----------------------------------------------------------------------------
   void printComboHit      (const mu2e::ComboHit*    Hit, 
 			   const mu2e::StepPointMC* Step,
 			   const char*              Opt   = "", 
@@ -233,8 +197,18 @@ public:
 				double TMin = -1.e6,
 				double TMax =  1.e6);
  
-  void printHelixHit      (const mu2e::HelixHit*    HelHit,
-			   const mu2e::ComboHit*    Hit, 
+  void printHelixSeed          (const mu2e::HelixSeed*         Helix   , 
+				//				const char* HelixSeedCollTag           ,
+				const char* StrawHitCollTag            ,  // usually - "makeSH"
+				const char* StrawDigiCollTag = "makeSD",
+				const char* Opt              = ""      );
+
+  void printHelixSeedCollection(const char* HelixSeedCollTag           ,  // always needed
+				int         PrintHits        = 0       ,
+				const char* StrawHitCollTag  = "makeSH",  // usually, "makeSH"
+				const char* StrawDigiCollTag = "makeSD");
+
+  void printStrawHit      (const mu2e::StrawHit*    Hit, 
 			   const mu2e::StepPointMC* Step,
 			   const char*              Opt   = "", 
 			   int                      INit  = -1,
@@ -246,32 +220,91 @@ public:
 				double TMin = -1.e6,
 				double TMax =  1.e6);
 
-  void printStrawHitMCTruth      (const mu2e::StrawHitMCTruth* Hit, const char* Opt = "");
+  void printStrawHitMCTruth            (const mu2e::StrawHitMCTruth* Hit, const char* Opt = "");
 
-  void printStrawHitMCTruthCollection (const char* ModuleLabel, 
-				       const char* ProductName = "", 
-				       const char* ProcessName = "");
+  void printStrawHitMCTruthCollection  (const char* ModuleLabel, 
+					const char* ProductName = "", 
+					const char* ProcessName = "");
 
-  // pass the detector name to know what to print for different detectors
-  // tested for Detector = 'tracker', 'calorimeter'
+  void printStrawHitPosition           (const mu2e::StrawHitPosition* Pos, const char* Opt = "");
+
+  void printStrawHitPositionCollection (const char* ModuleLabel     , 
+					const char* ProductName = "", 
+					const char* ProcessName = "");
+  void printHelixHit      (const mu2e::HelixHit*    HelHit,
+			   const mu2e::ComboHit*    Hit, 
+			   const mu2e::StepPointMC* Step,
+			   const char*              Opt   = "", 
+			   int                      INit  = -1,
+			   int                      Flags = -1);
+  
+  void printTrkCaloHit(const KalRep* Krep, mu2e::TrkCaloHit* CaloHit);
+
+  void printTrackSeed          (const mu2e::KalSeed* TrkSeed, 
+				const char* Opt = ""    ,
+				const char* ModuleLabelStrawHit="makeSH");
+
+  void printTrackSeedCollection(const char* ModuleLabel             , 
+				const char* ProductName         = "", 
+				const char* ProcessName         = "",
+				int         hitOpt              = 0,
+				const char* ModuleLabelStrawHit ="makeSH"); 
+
+  void printKalRep(const KalRep* Krep, const char* Opt = "", const char* Prefix = "");
+
+  void printKalRepCollection(const char* ModuleLabel     , 
+			     const char* ProductName = "", 
+			     const char* ProcessName = "",
+			     int         hitOpt      = 0); 
+//-----------------------------------------------------------------------------
+// time clusters
+//-----------------------------------------------------------------------------
+  void printTimeCluster   (const mu2e::TimeCluster* TimePeak, const char* Opt = "", 
+			   const mu2e::ComboHitCollection* ChColl=0,
+			   const char*StrawDigiMCModuleLabel = "makeSD");
+
+  void printTimeClusterCollection(const char* ModuleLabel        , 
+				  const char* ComboHitModuleLabel,
+				  const char* ProductName = ""   , 
+				  const char* ProcessName = ""   ,
+				  int         PrintHits   = 0    ,
+				  const char* StrawDigiMCModuleLabel = "makeSD");
+//-----------------------------------------------------------------------------
+// MC truth: gen and sim particles
+//-----------------------------------------------------------------------------
+  void printGenParticle   (const mu2e::GenParticle*    P  , const char* Opt = "");
+
+  void printGenParticleCollections();
+
+  void printSimParticle   (const mu2e::SimParticle*    P  , const char* Opt = "", const void* PrintData = nullptr);
+
+  void printSimParticleCollection(const char* ModuleLabel     , 
+				  const char* ProductName = "", 
+				  const char* ProcessName = "");
+//-----------------------------------------------------------------------------
+// pass the detector name to know what to print for different detectors
+// tested for Detector = 'tracker', 'calorimeter'
+//-----------------------------------------------------------------------------
   void printStepPointMC(const mu2e::StepPointMC* Step, const char* Detector, const char* Opt = "");
 
   void printStepPointMCCollection (const char* ModuleLabel     , 
 				   const char* ProductName = "", 
 				   const char* ProcessName = "");
+//-----------------------------------------------------------------------------
+// extrapolation and track-to-calorimeter matching
+//-----------------------------------------------------------------------------
+  void printTrkToCaloExtrapol           (const mu2e::TrkToCaloExtrapol*extrk,
+					 const char* Opt = "");
 
-  void printStrawHitPosition(const mu2e::StrawHitPosition* Pos, const char* Opt = "");
-
-  void printStrawHitPositionCollection (const char* ModuleLabel     , 
-					const char* ProductName = "", 
-					const char* ProcessName = "");
-
-  void printTrackClusterMatch(const mu2e::TrackClusterMatch* TcMatch, const char* Option);
-
-  void printTrackClusterMatchCollection (const char* ModuleLabel     , 
+  void printTrkToCaloExtrapolCollection (const char* ModuleLabel, 
 					 const char* ProductName = "", 
 					 const char* ProcessName = "");
-			      
+  void printTrackClusterMatch          (const mu2e::TrackClusterMatch* TcMatch, const char* Option);
+
+  void printTrackClusterMatchCollection(const char* ModuleLabel     , 
+					const char* ProductName = "", 
+					const char* ProcessName = "");
+  
 					// refit track dropping hits away > NSig sigma (0.1)
   void  refitTrack(void* Trk, double NSig);
 

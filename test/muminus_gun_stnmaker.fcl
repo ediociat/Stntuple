@@ -25,6 +25,7 @@ physics : {
 		 @sequence::Stntuple.digis          ,
 		 @sequence::Stntuple.trk_hit_reco   ,
 		 @sequence::Stntuple.cal_reco       ,
+		 @sequence::Stntuple.crv_reco       ,
 		 @sequence::Stntuple.reco_Dmu       ,
 		 @sequence::Stntuple.stnmaker_Dmu
 		]

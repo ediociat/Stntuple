@@ -107,7 +107,9 @@ class stntuple_helper:
                 self._list_of_object_files.append(o);
                 self._env.SharedObject(o,cc)
 
-        lib_name = os.environ['MU2E_BASE_RELEASE']+'/lib/'+self.libname+'.so';
+        dir = os.environ.get('MU2E_SATELLITE_RELEASE');
+        if (dir == None) : dir = os.environ.get('MU2E_BASE_RELEASE');
+        lib_name = dir+'/lib/'+self.libname+'.so';
 
         if (self._debug):
             print ("list_of_object_files:",self._list_of_object_files)

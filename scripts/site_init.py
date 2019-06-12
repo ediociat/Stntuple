@@ -47,7 +47,9 @@ def stntuple_gen_rootcint(source, target, env, for_signature):
     pcm_file = dict.replace(".cxx","_rdict.pcm");
 
 #    print "dict:"+dict + "   pcm_file:"+pcm_file;
-    lib_dir = os.environ['MU2E_BASE_RELEASE']+"/lib";
+    dir = os.environ.get('MU2E_SATELLITE_RELEASE');
+    if (dir == None) : dir = os.environ.get('MU2E_BASE_RELEASE');
+    lib_dir = dir+"/lib";
     cmd = 'if [ ! -d '+tmp_lib_dir+' ] ; then mkdir -p '+tmp_lib_dir+'; fi ;';
 #------------------------------------------------------------------------------
 # export $HOME is, for an unknown reason, needed to build in a DOCKER container

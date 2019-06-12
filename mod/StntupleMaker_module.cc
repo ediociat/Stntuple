@@ -88,7 +88,7 @@ protected:
   int                      fMakeHelices;
   int                      fMakeTrackSeeds;
   int                      fMakeTrigger;
-  int                      fMakeVDHits;
+  int                      fMakeCrv;
 //-----------------------------------------------------------------------------
 // module parameters
 //-----------------------------------------------------------------------------
@@ -97,7 +97,11 @@ protected:
   string                   fStrawHitsCollTag;
   string                   fStrawDigiCollTag;
 
-  string                   fVDHitsCollTag;         // name of the module produced SimParticleCollection
+  string                   fCrvRecoPulseCollTag;            //
+  string                   fCrvCoincidenceCollTag;          //
+  string                   fCrvCoincidenceClusterCollTag;   //
+
+  string                   fVDHitsCollTag;                  // hits on virtual detectors (StepPointMCCollection)
 
   vector<string>           fTimeClusterBlockName;
   vector<string>           fTimeClusterCollTag;
@@ -200,12 +204,13 @@ StntupleMaker::StntupleMaker(fhicl::ParameterSet const& PSet):
   , fMakeHelices             (PSet.get<int>           ("makeHelices"         ))
   , fMakeTrackSeeds          (PSet.get<int>           ("makeTrackSeeds"      ))
   , fMakeTrigger             (PSet.get<int>           ("makeTrigger"         ))
-  , fMakeVDHits              (PSet.get<int>           ("makeVDHits"          ))
+  , fMakeCrv                 (PSet.get<int>           ("makeCrv"             ))
   
   , fGenpCollTag             (PSet.get<string>        ("genpCollTag"         ))
   , fSimpCollTag             (PSet.get<string>        ("simpCollTag"         ))
   , fStrawHitsCollTag        (PSet.get<string>        ("strawHitsCollTag"    ))
   , fStrawDigiCollTag        (PSet.get<string>        ("strawDigiCollTag"    ))
+  , fCrvRecoPulseCollTag     (PSet.get<string>        ("crvRecoPulseCollTag" ))
   , fVDHitsCollTag           (PSet.get<string>        ("vdHitsCollTag"       ))
   , fTimeClusterBlockName    (PSet.get<vector<string>>("timeClusterBlockName"))
   , fTimeClusterCollTag      (PSet.get<vector<string>>("timeClusterCollTag"  ))
@@ -483,8 +488,10 @@ void StntupleMaker::beginJob() {
 	track_data->AddCollName("mu2e::StepPointMCCollection"         ,fVDHitsCollTag.data()      );
 	track_data->AddCollName("DarHandle"                           ,GetName()                  ,"DarHandle"    );
 	track_data->AddCollName("KalDiagHandle"                       ,GetName()                  ,"KalDiagHandle");
-	track_data->AddCollName("TrackTsBlockName"                    ,fTrackTsBlockName[i].data());
-	track_data->AddCollName("TrackTsCollTag"                      ,fTrackTsCollTag  [i].data());
+	if (fTrackTsBlockName.size() > 0) {
+	  track_data->AddCollName("TrackTsBlockName"                    ,fTrackTsBlockName[i].data());
+	  track_data->AddCollName("TrackTsCollTag"                      ,fTrackTsCollTag  [i].data());
+	}
 
 	SetResolveLinksMethod(block_name,StntupleInitMu2eTrackBlockLinks);
       }
@@ -592,21 +599,6 @@ void StntupleMaker::beginJob() {
     }
     //      SetResolveLinksMethod(block_name,StntupleInitMu2eTrackBlockLinks);
   }
-//-----------------------------------------------------------------------------
-// hits on virtual detectors - also StepPointMC's
-//-----------------------------------------------------------------------------
-  if (fMakeVDHits) {
-    TStnDataBlock* block = AddDataBlock("VDetBlock",
-					"TVDetDataBlock",
-					StntupleInitMu2eVDetDataBlock,
-					buffer_size,
-					split_mode,
-					compression_level);
-    if (block) {
-      block->AddCollName("mu2e::StepPointMCCollection",fVDHitsCollTag.data());
-      block->AddCollName("TimeOffsetMapsHandle"       ,GetName()            ,"TimeOffsetMapsHandle");
-    }
-  }  
 
   THistModule::afterEndJob();
 }

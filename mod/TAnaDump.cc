@@ -24,6 +24,14 @@
 #include "RecoDataProducts/inc/CaloCrystalHitCollection.hh"
 #include "RecoDataProducts/inc/CaloCrystalHit.hh"
 #include "RecoDataProducts/inc/CaloHitCollection.hh"
+
+#include "RecoDataProducts/inc/CrvRecoPulse.hh"
+
+#include "RecoDataProducts/inc/CrvCoincidence.hh"
+#include "RecoDataProducts/inc/CrvCoincidenceCollection.hh"
+
+#include "RecoDataProducts/inc/CrvCoincidenceCluster.hh"
+
 #include "RecoDataProducts/inc/StrawHitCollection.hh"
 #include "RecoDataProducts/inc/StrawHitFlagCollection.hh"
 #include "RecoDataProducts/inc/KalSeed.hh"
@@ -503,6 +511,288 @@ void TAnaDump::printCaloProtoClusterCollection(const char* ModuleLabel,
     printCaloProtoCluster(cluster,"data");
   }
 }
+
+//-----------------------------------------------------------------------------
+// CRV
+//-----------------------------------------------------------------------------
+void TAnaDump::printCrvCoincidence(const mu2e::CrvCoincidence* Coin,
+				   const char*                 Opt ) {
+  TString opt = Opt;
+
+  const std::vector<art::Ptr<mu2e::CrvRecoPulse>>* list_of_pulses = &Coin->GetCrvRecoPulses();
+
+  int sector      = Coin->GetCrvSectorType();
+  int np          = list_of_pulses->size();
+
+  printf("---------------------------------------------------------------------\n");
+  printf("Coinc Addr: %-16p Sector: %5i N(pulses): %5i\n",Coin, sector, np);
+
+  const mu2e::CrvRecoPulse* pulse(NULL);
+  printCrvRecoPulse(pulse, "banner");
+  for (int i=0; i<np; i++) {
+    pulse = list_of_pulses->at(i).get();
+    printCrvRecoPulse(pulse, "data");
+  }
+  
+  if (opt.Index("hits") >= 0) {
+  }
+}
+
+//-----------------------------------------------------------------------------
+void TAnaDump::printCrvCoincidenceCollection(const char* ModuleLabel, 
+					     const char* ProductName,
+					     const char* ProcessName) {
+
+  art::Handle<mu2e::CrvCoincidenceCollection> handle;
+  const mu2e::CrvCoincidenceCollection*       coinColl;
+
+  if (ProductName[0] != 0) {
+    art::Selector  selector(art::ProductInstanceNameSelector(ProductName) &&
+			    art::ProcessNameSelector(ProcessName)         && 
+			    art::ModuleLabelSelector(ModuleLabel)            );
+    fEvent->get(selector,handle);
+  }
+  else {
+    art::Selector  selector(art::ProcessNameSelector(ProcessName)         && 
+			    art::ModuleLabelSelector(ModuleLabel)            );
+    fEvent->get(selector,handle);
+  }
+//-----------------------------------------------------------------------------
+// make sure collection exists
+//-----------------------------------------------------------------------------
+  if (! handle.isValid()) {
+    printf("TAnaDump::printCrvCoincidenceCollection: no CrvCoincidenceCollection ");
+    printf("for module %s and ProductName=%s found, BAIL OUT\n",
+	   ModuleLabel,ProductName);
+    return;
+  }
+
+  coinColl = handle.product();
+
+  int ncoin = coinColl->size();
+
+  printf(">>>> ModuleLabel = %s N(coincidences) = %5i\n",ModuleLabel,ncoin);
+
+  const mu2e::CrvCoincidence* coin;
+
+  //  int banner_printed = 0;
+  for (int i=0; i<ncoin; i++) {
+    coin = &coinColl->at(i);
+    //    if (banner_printed == 0) {
+    //    printCrvCoincidence(coin, "banner");
+    // banner_printed = 1;
+    //  }
+
+    printCrvCoincidence(coin,"banner+data");
+  }
+ 
+}
+
+
+//-----------------------------------------------------------------------------
+void TAnaDump::printCrvCoincidenceCluster(const mu2e::CrvCoincidenceCluster* CCl, 
+					  const char* Opt                       ) {
+  TString opt = Opt;
+
+  if ((opt == "") || (opt.Index("banner") >= 0)) {
+    printf("--------------------------------------------------------------------------------------\n");
+    printf("CC Address         Sect   Np   NPe     Tstart      Tend        X          Y          Z\n");
+    printf("--------------------------------------------------------------------------------------\n");
+  }
+ 
+  if ((opt == "") || (opt.Index("data") >= 0)) {
+
+    const std::vector<art::Ptr<mu2e::CrvRecoPulse>>* list_of_pulses = &CCl->GetCrvRecoPulses();
+
+    int sector      = CCl->GetCrvSectorType();
+    int np          = list_of_pulses->size();
+
+    float x         = CCl->GetAvgCounterPos().x();
+    float y         = CCl->GetAvgCounterPos().y();
+    float z         = CCl->GetAvgCounterPos().z();
+    float t1        = CCl->GetStartTime();
+    float t2        = CCl->GetEndTime();
+    int   npe       = CCl->GetPEs();
+
+    printf("%-16p %5i %5i %5i %10.3f %10.3f %10.3f %10.3f %10.3f\n",CCl,sector,np,npe,t1,t2,x,y,z);
+
+    const mu2e::CrvRecoPulse* pulse(NULL);
+    printCrvRecoPulse(pulse, "banner");
+    for (int i=0; i<np; i++) {
+      pulse = list_of_pulses->at(i).get();
+      printCrvRecoPulse(pulse, "data");
+    }
+  }
+  
+  if (opt.Index("hits") >= 0) {
+
+  }
+}
+
+
+//-----------------------------------------------------------------------------
+void TAnaDump::printCrvCoincidenceClusterCollection(const char* ModuleLabel, 
+						    const char* ProductName,
+						    const char* ProcessName) {
+
+  art::Handle<mu2e::CrvCoincidenceClusterCollection> handle;
+  const mu2e::CrvCoincidenceClusterCollection*       ccColl;
+
+  if (ProductName[0] != 0) {
+    art::Selector  selector(art::ProductInstanceNameSelector(ProductName) &&
+			    art::ProcessNameSelector(ProcessName)         && 
+			    art::ModuleLabelSelector(ModuleLabel)            );
+    fEvent->get(selector,handle);
+  }
+  else {
+    art::Selector  selector(art::ProcessNameSelector(ProcessName)         && 
+			    art::ModuleLabelSelector(ModuleLabel)            );
+    fEvent->get(selector,handle);
+  }
+//-----------------------------------------------------------------------------
+// make sure collection exists
+//-----------------------------------------------------------------------------
+  if (! handle.isValid()) {
+    printf("TAnaDump::printCrvCoincidenceClusterCollection: no CrvCoincidenceClusterCollection ");
+    printf("for module %s and ProductName=%s found, BAIL OUT\n",
+	   ModuleLabel,ProductName);
+    return;
+  }
+
+  ccColl = handle.product();
+
+  int ncc = ccColl->size();
+
+  printf(">>>> ModuleLabel = %s N(coincidence clusters) = %5i\n",ModuleLabel,ncc);
+
+  const mu2e::CrvCoincidenceCluster* cc;
+
+  //  int banner_printed = 0;
+  for (int i=0; i<ncc; i++) {
+    cc = &ccColl->at(i);
+    //    if (banner_printed == 0) {
+    //      printCrvCoincidenceCluster(cc, "banner");
+    //      banner_printed = 1;
+    //    }
+
+    printCrvCoincidenceCluster(cc,"banner+data");
+  }
+ 
+}
+
+
+//-----------------------------------------------------------------------------
+void TAnaDump::printCrvRecoPulse(const mu2e::CrvRecoPulse* Pulse, 
+				 const char* Opt                ) {
+
+  TString opt = Opt;
+
+  if ((opt == "") || (opt.Index("banner") >= 0)) {
+    printf("---------------------------------------------------------------------------------------------\n");
+    printf("Pulse Addr         NPE   HPE    Time    Height    Width     Chi2    LeTime   Bar   Sipm  NInd\n");
+    printf("---------------------------------------------------------------------------------------------\n");
+  }
+ 
+  if ((opt == "") || (opt.Index("data") >= 0)) {
+
+    int npes        = Pulse->GetPEs();
+    int npes_height = Pulse->GetPEsPulseHeight();
+    int nind        = Pulse->GetWaveformIndices().size();
+    float time      = Pulse->GetPulseTime();
+    float height    = Pulse->GetPulseHeight();
+    float width     = Pulse->GetPulseWidth();
+    float chi2      = Pulse->GetPulseFitChi2();
+    float le_time   = Pulse->GetLEtime();
+
+    int bar         = Pulse->GetScintillatorBarIndex().asInt();
+    int sipm_number = Pulse->GetSiPMNumber();
+
+    printf("%-16p %5i %5i %8.3f %8.3f %8.3f %10.3f %8.3f %5i %5i %5i\n",
+     	   Pulse,
+	   npes,
+	   npes_height,
+	   time,
+	   height,
+	   width,
+	   chi2,
+	   le_time,
+	   bar,
+	   sipm_number,
+	   nind);
+  }
+  
+  if (opt.Index("hits") >= 0) {
+
+  }
+}
+
+//-----------------------------------------------------------------------------
+// Print reconstructed CRV pulses (processed waveforms)
+//-----------------------------------------------------------------------------
+void TAnaDump::printCrvRecoPulseCollection(const char* ModuleLabel, 
+					   const char* ProductName,
+					   const char* ProcessName) {
+
+  art::Handle<mu2e::CrvRecoPulseCollection> handle;
+  const mu2e::CrvRecoPulseCollection*       crpColl;
+
+  // art::Handle<mu2e::CaloHitMCTruthAssns> caloHitTruthHandle;
+  // const mu2e::CaloHitMCTruthAssns* caloHitTruth(0);
+  
+  if (ProductName[0] != 0) {
+    art::Selector  selector(art::ProductInstanceNameSelector(ProductName) &&
+			    art::ProcessNameSelector(ProcessName)         && 
+			    art::ModuleLabelSelector(ModuleLabel)            );
+    fEvent->get(selector,handle);
+
+    // art::Selector  selectorMC(art::ProductInstanceNameSelector(ProductName) &&
+    // 			      art::ProcessNameSelector(ProcessName)         && 
+    // 			      art::ModuleLabelSelector(MCModuleLabel)            );
+   
+    // fEvent->get(selectorMC,caloHitTruthHandle);
+  }
+  else {
+    art::Selector  selector(art::ProcessNameSelector(ProcessName)         && 
+			    art::ModuleLabelSelector(ModuleLabel)            );
+    fEvent->get(selector,handle);
+    // art::Selector  selectorMC(art::ProcessNameSelector(ProcessName)         && 
+    // 			      art::ModuleLabelSelector(MCModuleLabel)            );
+    // fEvent->get(selectorMC,caloHitTruthHandle);
+  }
+//-----------------------------------------------------------------------------
+// make sure collection exists
+//-----------------------------------------------------------------------------
+  if (! handle.isValid()) {
+    printf("TAnaDump::printCrvRecoPulseCollection: no CrvRecoPulseCollection ");
+    printf("for module %s and ProductName=%s found, BAIL OUT\n",
+	   ModuleLabel,ProductName);
+    return;
+  }
+
+  crpColl = handle.product();
+
+  int npulses = crpColl->size();
+
+  printf(">>>> ModuleLabel = %s N(reco pulses) = %5i\n",ModuleLabel,npulses);
+
+  //  if (caloHitTruthHandle.isValid()) caloHitTruth = caloHitTruthHandle.product();
+
+  const mu2e::CrvRecoPulse* pulse;
+
+
+  int banner_printed = 0;
+  for (int i=0; i<npulses; i++) {
+    pulse = &crpColl->at(i);
+    if (banner_printed == 0) {
+      printCrvRecoPulse(pulse, "banner");
+      banner_printed = 1;
+    }
+
+    printCrvRecoPulse(pulse,"data");
+  }
+ 
+}
+
 
 //-----------------------------------------------------------------------------
 void TAnaDump::printTrackSeed(const mu2e::KalSeed* TrkSeed        ,
@@ -1478,7 +1768,7 @@ void TAnaDump::printCaloHits(const char* ModuleLabel,
 
 
 //-----------------------------------------------------------------------------
-void TAnaDump::printDiskCalorimeter() {
+void TAnaDump::printCalorimeter() {
   const mu2e::DiskCalorimeter* cal;
   const mu2e::Disk* disk;
   
@@ -1627,62 +1917,6 @@ void TAnaDump::printCaloRecoDigiCollection(const char* ModuleLabel,
 	   -1.);//hit->psd());
   }
 }
-
-//------------------------------------------------------------------
-// void TAnaDump::printTrackClusterLink(const char* ModuleLabel, 
-// 			     const char* ProductName,
-// 			     const char* ProcessName) {
-
-//   printf(">>>> ModuleLabel = %s\n",ModuleLabel);
-
-//   //data about hits in the calorimeter crystals
-
-//   art::Handle<mu2e::TrackClusterLink> trkCluLinkHandle;
-//   const mu2e::TrackClusterLink* trkCluLink;
-
-//   if (ProductName[0] != 0) {
-//     art::Selector  selector(art::ProductInstanceNameSelector(ProductName) &&
-// 			    art::ProcessNameSelector(ProcessName)         && 
-// 			    art::ModuleLabelSelector(ModuleLabel)            );
-//     fEvent->get(selector, trkCluLinkHandle);
-//   }
-//   else {
-//     art::Selector  selector(art::ProcessNameSelector(ProcessName)         && 
-// 			    art::ModuleLabelSelector(ModuleLabel)            );
-//     fEvent->get(selector, trkCluLinkHandle);
-//   }
-  
-//   trkCluLink = trkCluLinkHandle.operator ->();
-
-//   int nhits = trkCluLink->size();
-
-//   const mu2e::CaloCluster* clu;
-//   //const KalRep *trk;
-
-//   int banner_printed = 0;
-//   const mu2e::TrkToCaloExtrapol* extrk;
-  
-
-
-//   for (int i=0; i<nhits; i++) {
-//     clu = &(*(trkCluLink->at(i).second.get()) );
-//     extrk = &(*(trkCluLink->at(i).first));
-//     if (banner_printed == 0) {
-//       printCaloCluster(clu, "banner");
-//       //banner_printed = 1;
-//     }
-//     printCaloCluster(clu,"data");
-    
-//     if (banner_printed == 0) {
-//       printTrkToCaloExtrapol(extrk,"banner");
-//       //printKalRep(trk,"banner");
-//       banner_printed = 1;
-//     }
-//     // printKalRep(trk,"data");
-//     printTrkToCaloExtrapol(extrk,"data");
-//   }
-  
-// }
 
 ////////////////////////////////////////////////////////////////////////////////
 

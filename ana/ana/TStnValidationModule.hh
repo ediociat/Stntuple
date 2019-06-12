@@ -110,19 +110,6 @@ public:
     TH1F*    fBestHyp[2];		// [0]: by chi2, [1]: by fit consistency
     TH1F*    fNGenp;                    // N(particles in GENP block)
 
-    TH1F*    fNCaloCrystalHits[2];
-    TH2F*    fNCaloHitsVsVane[2];
-    TH2F*    fNCaloHitsVsRow[2];
-    TH2F*    fNCaloHitsVsCol[2];
-    // calorimeter hit histograms
-
-    TH1F*    fETot        [4];            // total energy/event 
-    TH2F*    fECrVsR      [4];            // total energy_per_crystal/event vs radius
-    TH2F*    fNCrVsR      [4];            // total energy_per_crystal/event vs radius
-
-    TH2F*    fNCrystalHitsVsR[4];            //
-    TH2F*    fNHitCrystalsVsR[4];            //
-
     TH1F*    fNHitCrystalsTot;
     TH1F*    fECal;
     TH1F*    fECalOverEKin;

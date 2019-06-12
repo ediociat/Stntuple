@@ -1076,45 +1076,48 @@ Int_t StntupleInitMu2eTrackBlockLinks(TStnDataBlock* Block, AbsEvent* AnEvent, i
   ev     = Block->GetEvent();
 
   tb->GetModuleLabel("TrackTsBlockName",kseed_block_name);
+  if (kseed_block_name[0] != 0) {
 //-----------------------------------------------------------------------------
-// 'TrackTs' collection stores, for each track, its KalSeed
+// seeds are stored, fill links part: 'TrackTs' collection stores, for each track, 
+// its KalSeed
 //-----------------------------------------------------------------------------
-  tb->GetModuleLabel("TrackTsCollTag"  ,tsc_label);
-  tb->GetDescription("TrackTsCollTag"  ,tsc_description);
+    tb->GetModuleLabel("TrackTsCollTag"  ,tsc_label);
+    tb->GetDescription("TrackTsCollTag"  ,tsc_description);
 
-  art::Handle<mu2e::KalSeedCollection>  tsch;
-  mu2e::KalSeedCollection*              list_of_trackSeeds;
+    art::Handle<mu2e::KalSeedCollection>  tsch;
+    mu2e::KalSeedCollection*              list_of_trackSeeds;
 
-  if (tsc_description[0] == 0) AnEvent->getByLabel(tsc_label,tsch);
-  else                         AnEvent->getByLabel(tsc_label,tsc_description,tsch);
-  list_of_trackSeeds = (mu2e::KalSeedCollection*) tsch.product();
+    if (tsc_description[0] == 0) AnEvent->getByLabel(tsc_label,tsch);
+    else                         AnEvent->getByLabel(tsc_label,tsc_description,tsch);
+    list_of_trackSeeds = (mu2e::KalSeedCollection*) tsch.product();
 
-  tsb    = (TStnTrackSeedBlock*) ev->GetDataBlock(kseed_block_name);
+    tsb    = (TStnTrackSeedBlock*) ev->GetDataBlock(kseed_block_name);
 
-  int    ntrk     = tb->NTracks();
-  int    ntrkseed = tsb->NTrackSeeds();
+    int    ntrk     = tb->NTracks();
+    int    ntrkseed = tsb->NTrackSeeds();
 
-  const mu2e::KalSeed *ts, *tss;
+    const mu2e::KalSeed *ts, *tss;
 
-  for (int i=0; i<ntrk; i++) {
-    trk      = tb->Track(i);
-    ts       = &list_of_trackSeeds->at(i); // seed corresponding to track # i
+    for (int i=0; i<ntrk; i++) {
+      trk      = tb->Track(i);
+      ts       = &list_of_trackSeeds->at(i); // seed corresponding to track # i
 
-    int  loc(-1);
-    for (int j=0; j<ntrkseed; ++j) {
-      tss = tsb->TrackSeed(j)->fTrackSeed;
-      if (ts == tss) {
-	loc = j;
-	break;
+      int  loc(-1);
+      for (int j=0; j<ntrkseed; ++j) {
+	tss = tsb->TrackSeed(j)->fTrackSeed;
+	if (ts == tss) {
+	  loc = j;
+	  break;
+	}
       }
-    }
     
-    if (loc < 0) {
-      printf(">>> ERROR: %s track %i -> no TrackSeed associated\n", krep_module_label, i);
-      continue;
-    }
+      if (loc < 0) {
+	printf(">>> ERROR: %s track %i -> no TrackSeed associated\n", krep_module_label, i);
+	continue;
+      }
     
-    trk->SetTrackSeedIndex(loc);
+      trk->SetTrackSeedIndex(loc);
+    }
   }
 //-----------------------------------------------------------------------------
 // mark links as initialized

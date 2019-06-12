@@ -29,7 +29,7 @@ outputs.detectorOutput.fileName           : "sim._USER_.eminus_gun_stnmaker.xxx.
 # cross sections - that shouldn't affect the electron simulation 
 #------------------------------------------------------------------------------
 physics.producers.generate                      : { @table::Stntuple.producers.egun }
-physics.producers.g4run.physics.physicsListName : "QGSP_BERT_MU2ER1"
+physics.producers.g4run.physics.physicsListName : "QGSP_BERT"
 #------------------------------------------------------------------------------
 # everything below is appended by murat/scripts/submit_mu2e_job
 #------------------------------------------------------------------------------

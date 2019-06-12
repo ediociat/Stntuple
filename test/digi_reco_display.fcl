@@ -46,6 +46,7 @@ physics : {
 #	  EventFilter                        , 
    	  @sequence::Stntuple.trk_hit_reco   ,
 	  @sequence::Stntuple.cal_reco       ,
+	  @sequence::Stntuple.crv_reco       ,
 	  @sequence::Stntuple.dem_reco       ,
 	  #		     @sequence::Stntuple.stnmaker_dem
 	  MuHitDisplayDem

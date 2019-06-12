@@ -45,19 +45,20 @@ StntupleMakerTemplate : { module_type:StntupleMaker
     makeSimp             : 1  # 0: dont write; 1:save all; 2:save primary only
     makeStepPointMC      : 1
     makeStrawData        : 0
+    makeCrv              : 0
     makeTracks           : 1
     makeTrackStrawHits   : 0
     makeTrigger          : 0
     makeTrackSeeds       : 0
     makeTimeClusters     : 0
     makeHelices          : 0
-    makeVDHits           : 0
     
     KalDiag              : { @table::KalDiagDirect    }
     DoubletAmbigResolver : { @table::TrkReco.DoubletAmbigResolver }
 
     caloCrystalHitsMaker : "CaloCrystalHitFromHit"
     caloClusterMaker     : "CaloClusterFromProtoCluster"
+    crvRecoPulseCollTag  : "to_be_defined_in_Stntuple/fcl/prolog.fcl"
 #------------------------------------------------------------------------------
 # sometimes may need to store multiple track blocks, thus - vectors
 # by default, always run MergePatRec, which, in case only one track reconstruction
@@ -78,7 +79,7 @@ StntupleMakerTemplate : { module_type:StntupleMaker
     helixCollTag         : []
 
     trackSeedBlockName   : []
-    trackSeedModuleLabel : []
+    trackSeedCollTag     : []
 
     trackBlockName       : [ "TrackBlock"   ]
     trackCollTag         : [ "MergePatRec"  ]

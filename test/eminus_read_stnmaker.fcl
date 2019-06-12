@@ -1,6 +1,6 @@
 # -*- mode:tcl -*-
 #------------------------------------------------------------------------------
-# generate 105 MeV/c electrons and make STNTUPLE
+# read file with digis, run reconstruction, make STNTUPLE
 #------------------------------------------------------------------------------
 #include "fcl/minimalMessageService.fcl"
 #include "fcl/standardProducers.fcl"
@@ -30,7 +30,7 @@ physics : {
     }
     
     filters  : { @table::filters 
-	InitStntuple : { @table::filters.InitStntuple histFileName : "nts.user.eminus_gun_stnmaker.xxx.000001.stn" }
+	InitStntuple : { @table::filters.InitStntuple histFileName : "nts.user.eminus_read_stnmaker.xxx.000001.stn" }
     }
 
 #    @table::paths
@@ -40,6 +40,7 @@ physics : {
 	  @sequence::Stntuple.trk_hit_reco   ,
 	  @sequence::Stntuple.cal_reco       ,
 	  @sequence::Stntuple.dem_reco       ,
+	  @sequence::Stntuple.crv_reco       ,
 	  @sequence::Stntuple.stnmaker_dem
 	 ]
 
@@ -48,13 +49,13 @@ physics : {
     end_paths     : [ out ]
 }
 
-services.TFileService.fileName            : "nts.user.eminus_gun_stnmaker.xxx.000001.root"
+services.TFileService.fileName            : "nts.user.eminus_read_stnmaker.xxx.000001.root"
 #------------------------------------------------------------------------------
 # uncomment the next 2 lines if you want the DST (.art) file to be written out
 #-----------------------------------------------------------------------------
 #physics.out                               : [ detectorOutput ]
 #outputs.detectorOutput.SelectEvents       : [ path_gen_digi_reco_stn_tcm_dem]
-outputs.detectorOutput.fileName           : "sim.user.eminus_gun_stnmaker.xxx.000001.art"
+outputs.detectorOutput.fileName           : "sim.user.eminus_read_stnmaker.xxx.000001.art"
 #------------------------------------------------------------------------------
 # uncomment to avoid waisting time on the initialization of detailed neutron 
 # cross sections - that shouldn't affect the electron simulation 

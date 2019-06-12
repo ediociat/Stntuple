@@ -33,6 +33,7 @@ physics : {
 		 @sequence::Stntuple.trk_hit_reco   ,
 		 @sequence::Stntuple.cal_reco       ,
 		 @sequence::Stntuple.reco_De        ,
+		 @sequence::Stntuple.crv_reco       ,
 		 @sequence::Stntuple.stnmaker_De
 		]
 #------------------------------------------------------------------------------
@@ -41,6 +42,7 @@ physics : {
     p2       : [ @sequence::Stntuple.trk_hit_reco   ,
 		 @sequence::Stntuple.cal_reco       ,
 		 @sequence::Stntuple.reco_De        ,
+		 @sequence::Stntuple.crv_reco       ,
 		 @sequence::Stntuple.stnmaker_De
 		]
 #------------------------------------------------------------------------------
@@ -53,6 +55,7 @@ physics : {
 		 @sequence::Stntuple.tpr_reco_dem    ,
 		 @sequence::Stntuple.cpr_reco_dem    ,
 		 @sequence::Stntuple.mpr_reco_dem    ,
+		 @sequence::Stntuple.crv_reco        ,
 		 @sequence::Stntuple.stnmaker_tcm_dem
 		]
 #------------------------------------------------------------------------------
@@ -62,6 +65,7 @@ physics : {
 		 @sequence::Stntuple.trk_hit_reco   ,
 		 @sequence::Stntuple.cal_reco       ,
 		 @sequence::Stntuple.reco_De        ,
+		 @sequence::Stntuple.crv_reco       ,
 		 MuHitDisplayDeMHDar
 		]
 #------------------------------------------------------------------------------
@@ -70,7 +74,8 @@ physics : {
     p5       : [ EventFilter,
 		 @sequence::Stntuple.trk_hit_reco   ,
 		 @sequence::Stntuple.cal_reco       ,
-		 @sequence::Stntuple.reco_De        
+		 @sequence::Stntuple.reco_De        ,
+		 @sequence::Stntuple.crv_reco       
 		]
 
     trigger_paths : [ @local::TRIGGER_PATH ]
