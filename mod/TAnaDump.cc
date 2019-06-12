@@ -683,7 +683,7 @@ void TAnaDump::printHelixSeed(const mu2e::HelixSeed* Helix          ,
   if ((opt == "") || (opt == "banner")) {
     printf("------------------------------------------------------------------");
     printf("--------------------------------------------------------------------------------------\n");
-    printf("  HelID   Address    N    nL   P        pT      T0     T0err  ");
+    printf("  HelID   Address    N    nL      P        pT      T0     T0err  ");
     printf("    D0      FZ0      X0       Y0    Lambda    radius   ECal   chi2XY  chi2ZPhi    flag\n");
     printf("------------------------------------------------------------------");
     printf("--------------------------------------------------------------------------------------\n");
