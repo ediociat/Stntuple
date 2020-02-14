@@ -58,7 +58,7 @@ int StntupleInitTriggerBlock::InitDataBlock(TStnDataBlock* Block, AbsEvent* Even
   for (int i=0; i<block->fNPaths; i++) {
     const std::string& name = trn.getTrigPath(i);
 
-    if (trn.accepted(name)) {
+    if (trn.accept(name)) {
 //-----------------------------------------------------------------------------
 // the event has passed the logic of the trigger path named 'name'
 //-----------------------------------------------------------------------------

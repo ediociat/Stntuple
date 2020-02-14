@@ -236,6 +236,30 @@ Stntuple : { @table::Stntuple             # defined in Stntuple/fcl/prolog.fcl
 	}
 
 	generate : { @table::EventGenerator.producers.egun }    # to avoid diagnostics
+
+	MuonCaptureProtonGun : { @table::StoppedParticleReactionGun
+	    physics : { @table::StoppedParticleReactionGun.physics
+		pdgId            : 2212
+		spectrumShape    : "tabulated"
+		spectrumVariable : "kineticEnergy"
+		spectrumFileName : "ConditionsService/data/ejected_protons_2020.tbl"
+	    }
+	    muonStops            : { @table::mu2e.tgtMuonStops
+		inputFiles: @local::mergedMuon_tgtStops_mdc2018_1
+	    }
+	}
+
+	MuonCaptureDeuteronGun : { @table::StoppedParticleReactionGun
+	    physics : { @table::StoppedParticleReactionGun.physics
+		pdgId            : 1000010020
+		spectrumShape    : "tabulated"
+		spectrumVariable : "kineticEnergy"
+		spectrumFileName : "ConditionsService/data/ejected_deuterons_2020.tbl"
+	    }
+	    muonStops            : { @table::mu2e.tgtMuonStops
+		inputFiles: @local::mergedMuon_tgtStops_mdc2018_1
+	    }
+	}
     }
 
     reco_producers : { @table::Stntuple.producers 
